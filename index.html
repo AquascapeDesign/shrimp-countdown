@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Countdown</title>
+  <style>
+    body { margin: 0; padding: 0; font-family: sans-serif; background: #1a1a1a; color: #c99a00; }
+    .container { padding: 20px; text-align: center; }
+    #cd { font-size: 26px; font-weight: bold; margin-top: 10px; }
+    .info { font-size: 14px; color: #fff; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p><strong>Order within the next:</strong></p>
+    <div id="cd">--:--:--</div>
+    <div class="info">to receive same-day dispatch (Mon–Fri, before 13:00 GMT)</div>
+  </div>
+
+  <script>
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date();
+      target.setUTCHours(13, 0, 0, 0);
+      if (now > target || now.getUTCDay() === 6 || now.getUTCDay() === 0) {
+        document.getElementById("cd").textContent = "Next dispatch: next working day";
+        return;
+      }
+      const diff = target - now;
+      const h = Math.floor(diff / 1000 / 60 / 60);
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      document.getElementById("cd").textContent = `${h}h ${m}m ${s}s`;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
