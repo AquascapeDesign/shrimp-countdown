@@ -2,38 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Daily Countdown</title>
+  <title>Shipping Countdown</title>
   <style>
-    body { margin: 0; padding: 0; font-family: sans-serif; background: #1a1a1a; color: #c99a00; }
-    .container { padding: 20px; text-align: center; }
-    #cd { font-size: 26px; font-weight: bold; margin-top: 10px; }
-    .info { font-size: 14px; color: #fff; margin-top: 8px; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: transparent;
+    }
+    .container {
+      padding: 20px;
+      text-align: center;
+      background-color: #000;
+      color: #FFD700;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+    }
+    #cd {
+      font-size: 28px;
+      font-weight: bold;
+      color: #FFD700;
+    }
+    .info {
+      font-size: 14px;
+      color: #FFFFFF;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <p><strong>Order within the next:</strong></p>
     <div id="cd">--:--:--</div>
-    <div class="info">to receive same-day dispatch (Mon–Fri, before 13:00 GMT)</div>
+    <p class="info">to receive same-day dispatch (Mon–Fri, before 13:00 GMT)</p>
   </div>
 
   <script>
     function updateCountdown() {
       const now = new Date();
-      const target = new Date();
-      target.setUTCHours(13, 0, 0, 0);
-      if (now > target || now.getUTCDay() === 6 || now.getUTCDay() === 0) {
-        document.getElementById("cd").textContent = "Next dispatch: next working day";
+      const cutoff = new Date();
+      cutoff.setHours(13, 0, 0, 0); // 13:00 GMT
+
+      if (now > cutoff || now.getDay() === 6 || now.getDay() === 0) {
+        // After 13:00 or on weekend
+        document.getElementById("cd").innerText = "Next working day";
         return;
       }
-      const diff = target - now;
-      const h = Math.floor(diff / 1000 / 60 / 60);
-      const m = Math.floor((diff / 1000 / 60) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-      document.getElementById("cd").textContent = `${h}h ${m}m ${s}s`;
+
+      const diff = cutoff - now;
+      const hours = Math.floor(diff / 1000 / 60 / 60);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("cd").innerText =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
-    updateCountdown();
+
     setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 </body>
 </html>
