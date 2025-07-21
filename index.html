@@ -43,23 +43,22 @@
       const cutoff = new Date();
       cutoff.setHours(13, 0, 0, 0); // 13:00 GMT
 
-      if (now > cutoff || now.getDay() === 6 || now.getDay() === 0) {
-        // After 13:00 or on weekend
+      if (now.getDay() === 0 || now.getDay() === 6 || now >= cutoff) {
         document.getElementById("cd").innerText = "Next working day";
         return;
       }
 
       const diff = cutoff - now;
-      const hours = Math.floor(diff / 1000 / 60 / 60);
-      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
       document.getElementById("cd").innerText =
         `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
-    setInterval(updateCountdown, 1000);
     updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
